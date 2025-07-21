@@ -1,26 +1,222 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+    /* Light mode colors - professional and readable */
+    --background: #fafafa;
+    --foreground: #1a1a1a;
+    --card: #ffffff;
+    --card-foreground: #1a1a1a;
+    --popover: #ffffff;
+    --popover-foreground: #1a1a1a;
+    --primary: #2c3e50;
+    --primary-foreground: #ffffff;
+    --secondary: #f3f4f6;
+    --secondary-foreground: #1a1a1a;
+    --muted: #f9fafb;
+    --muted-foreground: #6b7280;
+    --accent: #e5e7eb;
+    --accent-foreground: #1a1a1a;
+    --destructive: #dc2626;
+    --destructive-foreground: #ffffff;
+    --border: #e5e7eb;
+    --input: #e5e7eb;
+    --ring: #3b82f6;
+    --radius: 0.375rem;
+
+    /* Additional semantic colors */
+    --info: #3b82f6;
+    --info-foreground: #ffffff;
+    --warning: #f59e0b;
+    --warning-foreground: #ffffff;
+    --success: #10b981;
+    --success-foreground: #ffffff;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+    /* Map CSS variables to Tailwind theme */
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
+    --color-card: var(--card);
+    --color-card-foreground: var(--card-foreground);
+    --color-popover: var(--popover);
+    --color-popover-foreground: var(--popover-foreground);
+    --color-primary: var(--primary);
+    --color-primary-foreground: var(--primary-foreground);
+    --color-secondary: var(--secondary);
+    --color-secondary-foreground: var(--secondary-foreground);
+    --color-muted: var(--muted);
+    --color-muted-foreground: var(--muted-foreground);
+    --color-accent: var(--accent);
+    --color-accent-foreground: var(--accent-foreground);
+    --color-destructive: var(--destructive);
+    --color-destructive-foreground: var(--destructive-foreground);
+    --color-border: var(--border);
+    --color-input: var(--input);
+    --color-ring: var(--ring);
+
+    /* Semantic colors */
+    --color-info: var(--info);
+    --color-info-foreground: var(--info-foreground);
+    --color-warning: var(--warning);
+    --color-warning-foreground: var(--warning-foreground);
+    --color-success: var(--success);
+    --color-success-foreground: var(--success-foreground);
+
+    /* Typography */
+    --font-sans: var(--font-geist-sans), system-ui, -apple-system,
+        BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-mono: var(--font-geist-mono), 'SF Mono', Monaco, 'Cascadia Code',
+        'Roboto Mono', monospace;
+
+    /* Spacing and sizing */
+    --radius-sm: calc(var(--radius) - 0.125rem);
+    --radius-md: var(--radius);
+    --radius-lg: calc(var(--radius) + 0.125rem);
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+    :root {
+        /* Dark mode colors - high contrast for readability */
+        --background: #0a0a0a;
+        --foreground: #fafafa;
+        --card: #1a1a1a;
+        --card-foreground: #fafafa;
+        --popover: #1a1a1a;
+        --popover-foreground: #fafafa;
+        --primary: #60a5fa;
+        --primary-foreground: #0a0a0a;
+        --secondary: #262626;
+        --secondary-foreground: #fafafa;
+        --muted: #262626;
+        --muted-foreground: #a3a3a3;
+        --accent: #262626;
+        --accent-foreground: #fafafa;
+        --destructive: #ef4444;
+        --destructive-foreground: #fafafa;
+        --border: #262626;
+        --input: #262626;
+        --ring: #60a5fa;
+
+        /* Additional semantic colors for dark mode */
+        --info: #60a5fa;
+        --info-foreground: #0a0a0a;
+        --warning: #fbbf24;
+        --warning-foreground: #0a0a0a;
+        --success: #34d399;
+        --success-foreground: #0a0a0a;
+    }
+}
+
+/* Base styles */
+* {
+    box-sizing: border-box;
+    border-color: var(--border);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+    background: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Focus styles for accessibility */
+:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+}
+
+/* Selection styles */
+::selection {
+    background-color: var(--primary);
+    color: var(--primary-foreground);
+}
+
+/* Scrollbar styles */
+::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--muted);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--muted-foreground);
+    border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--foreground);
+}
+
+/* Typography defaults */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-weight: 600;
+    line-height: 1.2;
+    margin-top: 0;
+}
+
+p {
+    margin-top: 0;
+}
+
+/* Link styles */
+a {
+    color: var(--primary);
+    text-decoration: none;
+    transition: opacity 0.2s ease;
+}
+
+a:hover {
+    opacity: 0.8;
+    text-decoration: underline;
+}
+
+/* Utility classes for semantic colors */
+.text-info {
+    color: var(--info);
+}
+.text-warning {
+    color: var(--warning);
+}
+.text-success {
+    color: var(--success);
+}
+.text-destructive {
+    color: var(--destructive);
+}
+
+.bg-info {
+    background-color: var(--info);
+}
+.bg-warning {
+    background-color: var(--warning);
+}
+.bg-success {
+    background-color: var(--success);
+}
+.bg-destructive {
+    background-color: var(--destructive);
+}
+
+/* Print styles */
+@media print {
+    body {
+        background: white;
+        color: black;
+    }
+
+    a {
+        color: black;
+        text-decoration: underline;
+    }
 }
