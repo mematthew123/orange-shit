@@ -20,7 +20,11 @@ export const metadata: Metadata = {
     description: 'A collection of notable quotes and testimonials',
     keywords: ['quotes', 'testimonials', 'timeline'],
     authors: [{ name: 'Orange Shit' }],
-    viewport: 'width=device-width, initial-scale=1',
+};
+
+export const viewport = {
+    width: 'device-width',
+    initialScale: 1,
     themeColor: [
         { media: '(prefers-color-scheme: light)', color: '#fafafa' },
         { media: '(prefers-color-scheme: dark)', color: '#0a0a0a' }
