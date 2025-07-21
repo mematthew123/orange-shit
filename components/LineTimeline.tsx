@@ -1,7 +1,14 @@
 'use client';
 
 import { useState } from 'react';
-import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/outline';
+import {
+    ChevronDownIcon,
+    ChevronUpIcon,
+    CalendarIcon,
+    DocumentTextIcon,
+    ScaleIcon,
+    ExclamationTriangleIcon,
+} from '@heroicons/react/24/outline';
 
 const timeline = [
     {
@@ -144,11 +151,27 @@ const timeline = [
 ];
 
 const categories = {
-    all: { name: 'All Events', color: 'text-primary' },
-    relationship: { name: 'Trump-Epstein Relationship', color: 'text-info' },
-    allegation: { name: 'Sexual Assault Allegations', color: 'text-warning' },
-    legal: { name: 'Legal Proceedings', color: 'text-destructive' },
-    scandal: { name: 'Public Scandals', color: 'text-accent-foreground' },
+    all: { name: 'All Events', color: 'text-primary', icon: CalendarIcon },
+    relationship: {
+        name: 'Trump-Epstein Relationship',
+        color: 'text-info',
+        icon: DocumentTextIcon,
+    },
+    allegation: {
+        name: 'Sexual Assault Allegations',
+        color: 'text-warning',
+        icon: ExclamationTriangleIcon,
+    },
+    legal: {
+        name: 'Legal Proceedings',
+        color: 'text-destructive',
+        icon: ScaleIcon,
+    },
+    scandal: {
+        name: 'Public Scandals',
+        color: 'text-accent-foreground',
+        icon: DocumentTextIcon,
+    },
 };
 
 export default function LineTimeline() {
@@ -185,32 +208,48 @@ export default function LineTimeline() {
                 </div>
 
                 {/* Category Filter */}
-                <div className='flex flex-wrap justify-center gap-2 mb-12'>
-                    {Object.entries(categories).map(([key, value]) => (
-                        <button
-                            key={key}
-                            onClick={() =>
-                                setSelectedCategory(
-                                    key as keyof typeof categories,
-                                )
-                            }
-                            className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
-                                selectedCategory === key
-                                    ? 'bg-primary text-primary-foreground shadow-lg scale-105'
-                                    : 'bg-card text-card-foreground hover:bg-accent hover:scale-105'
-                            }`}
-                        >
-                            {value.name}
-                        </button>
-                    ))}
+                <div className='flex flex-wrap justify-center gap-3 mb-16'>
+                    {Object.entries(categories).map(([key, value]) => {
+                        const Icon = value.icon;
+                        const isSelected = selectedCategory === key;
+                        return (
+                            <button
+                                key={key}
+                                onClick={() =>
+                                    setSelectedCategory(
+                                        key as keyof typeof categories,
+                                    )
+                                }
+                                className={`group relative px-5 py-3 rounded-xl text-sm font-medium transition-all duration-300 ${
+                                    isSelected
+                                        ? 'bg-primary text-primary-foreground shadow-xl scale-105 ring-2 ring-primary/20'
+                                        : 'bg-card text-card-foreground hover:bg-accent hover:scale-105 hover:shadow-md border border-border'
+                                }`}
+                            >
+                                <div className='flex items-center gap-2'>
+                                    <Icon
+                                        className={`h-4 w-4 ${
+                                            isSelected
+                                                ? 'animate-pulse'
+                                                : 'group-hover:animate-pulse'
+                                        }`}
+                                    />
+                                    <span>{value.name}</span>
+                                </div>
+                                {isSelected && (
+                                    <div className='absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-primary rounded-full' />
+                                )}
+                            </button>
+                        );
+                    })}
                 </div>
 
                 {/* Vertical Timeline */}
                 <div className='mx-auto max-w-6xl'>
                     <div className='relative'>
                         {/* Timeline line - left on mobile, center on desktop */}
-                        <div className='absolute left-8 md:left-1/2 md:transform md:-translate-x-1/2 w-0.5 h-full bg-border' />
-                        
+                        <div className='absolute left-8 md:left-1/2 md:transform md:-translate-x-1/2 w-0.5 h-full bg-gradient-to-b from-border via-primary/20 to-border' />
+
                         <div className='space-y-12'>
                             {filteredTimeline.map((item, index) => {
                                 const isExpanded = expandedItems.has(index);
@@ -226,43 +265,77 @@ export default function LineTimeline() {
                                         <div className='md:hidden flex'>
                                             {/* Timeline dot for mobile */}
                                             <div className='absolute left-8 -translate-x-1/2 z-10'>
-                                                <div className={`w-4 h-4 rounded-full border-2 border-background ${categoryInfo.color.replace('text-', 'bg-')}`} />
-                                                <div className='absolute -inset-2 animate-pulse rounded-full bg-current opacity-20' />
+                                                <div
+                                                    className={`w-4 h-4 rounded-full border-4 border-background shadow-lg ${categoryInfo.color.replace(
+                                                        'text-',
+                                                        'bg-',
+                                                    )}`}
+                                                />
+                                                <div
+                                                    className={`absolute -inset-2 rounded-full ${categoryInfo.color.replace(
+                                                        'text-',
+                                                        'bg-',
+                                                    )} opacity-20 ${
+                                                        isExpanded
+                                                            ? 'animate-ping'
+                                                            : 'animate-pulse'
+                                                    }`}
+                                                />
                                             </div>
-                                            
+
                                             {/* Content for mobile */}
                                             <div className='ml-16 flex-1'>
-                                                <div className='bg-card p-6 rounded-lg border border-border hover:border-primary/50 hover:shadow-lg transition-all duration-200 hover-lift animate-fade-up'>
+                                                <div
+                                                    className={`bg-card p-6 rounded-xl border-2 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl ${
+                                                        isExpanded
+                                                            ? 'border-primary/50 shadow-lg'
+                                                            : 'border-border hover:border-primary/30'
+                                                    }`}
+                                                >
                                                     <time
                                                         dateTime={item.dateTime}
                                                         className={`text-sm font-semibold ${categoryInfo.color} block mb-2`}
                                                     >
                                                         {item.date}
                                                     </time>
-                                                    
+
                                                     <div className='flex items-start justify-between'>
                                                         <h3 className='text-lg font-semibold text-card-foreground pr-2'>
                                                             {item.name}
                                                         </h3>
                                                         <button
-                                                            onClick={() => toggleExpanded(index)}
-                                                            className='flex-shrink-0 p-1 hover:bg-accent rounded transition-colors'
-                                                            aria-label={isExpanded ? 'Show less' : 'Show more'}
+                                                            onClick={() =>
+                                                                toggleExpanded(
+                                                                    index,
+                                                                )
+                                                            }
+                                                            className='flex-shrink-0 p-2 hover:bg-accent rounded-lg transition-all duration-200 hover:scale-110'
+                                                            aria-label={
+                                                                isExpanded
+                                                                    ? 'Show less'
+                                                                    : 'Show more'
+                                                            }
                                                         >
                                                             {isExpanded ? (
-                                                                <ChevronUpIcon className='h-4 w-4 text-muted-foreground' />
+                                                                <ChevronUpIcon className='h-5 w-5 text-muted-foreground' />
                                                             ) : (
-                                                                <ChevronDownIcon className='h-4 w-4 text-muted-foreground' />
+                                                                <ChevronDownIcon className='h-5 w-5 text-muted-foreground' />
                                                             )}
                                                         </button>
                                                     </div>
 
-                                                    <p className={`mt-2 text-sm text-muted-foreground ${!isExpanded ? 'line-clamp-3' : ''}`}>
+                                                    <p
+                                                        className={`mt-2 text-sm text-muted-foreground ${
+                                                            !isExpanded
+                                                                ? 'line-clamp-3'
+                                                                : ''
+                                                        }`}
+                                                    >
                                                         {item.description}
                                                     </p>
 
                                                     {item.subcategory && (
-                                                        <span className='inline-block mt-3 px-2 py-1 text-xs font-medium bg-secondary text-secondary-foreground rounded'>
+                                                        <span className='inline-block mt-3 px-3 py-1 text-xs font-medium bg-secondary text-secondary-foreground rounded-full'>
                                                             {item.subcategory}
                                                         </span>
                                                     )}
@@ -271,8 +344,20 @@ export default function LineTimeline() {
                                         </div>
 
                                         {/* Desktop Layout */}
-                                        <div className={`hidden md:flex items-center ${isEven ? 'justify-start' : 'justify-end'}`}>
-                                            <div className={`w-5/12 ${isEven ? 'text-right pr-8' : 'text-left pl-8 order-1'}`}>
+                                        <div
+                                            className={`hidden md:flex items-center ${
+                                                isEven
+                                                    ? 'justify-start'
+                                                    : 'justify-end'
+                                            }`}
+                                        >
+                                            <div
+                                                className={`w-5/12 ${
+                                                    isEven
+                                                        ? 'text-right pr-8'
+                                                        : 'text-left pl-8 order-1'
+                                                }`}
+                                            >
                                                 <time
                                                     dateTime={item.dateTime}
                                                     className={`text-sm font-semibold ${categoryInfo.color}`}
@@ -280,39 +365,58 @@ export default function LineTimeline() {
                                                     {item.date}
                                                 </time>
                                             </div>
-                                            
-                                            {/* Timeline dot for desktop */}
-                                            <div className='absolute left-1/2 transform -translate-x-1/2 z-10'>
-                                                <div className={`w-4 h-4 rounded-full border-2 border-background ${categoryInfo.color.replace('text-', 'bg-')}`} />
-                                                <div className='absolute -inset-2 animate-pulse rounded-full bg-current opacity-20' />
-                                            </div>
-                                            
+
+
                                             {/* Content card for desktop */}
-                                            <div className={`w-5/12 ${isEven ? 'order-1' : ''}`}>
-                                                <div className='bg-card p-6 rounded-lg border border-border hover:border-primary/50 hover:shadow-lg transition-all duration-200 hover-lift animate-fade-up'>
+                                            <div
+                                                className={`w-5/12 ${
+                                                    isEven ? 'order-1' : ''
+                                                }`}
+                                            >
+                                                <div
+                                                    className={`bg-card p-6 rounded-xl border-2 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl ${
+                                                        isExpanded
+                                                            ? 'border-primary/50 shadow-lg'
+                                                            : 'border-border hover:border-primary/30'
+                                                    }`}
+                                                >
                                                     <div className='flex items-start justify-between'>
                                                         <h3 className='text-lg font-semibold text-card-foreground pr-2'>
                                                             {item.name}
                                                         </h3>
                                                         <button
-                                                            onClick={() => toggleExpanded(index)}
-                                                            className='flex-shrink-0 p-1 hover:bg-accent rounded transition-colors'
-                                                            aria-label={isExpanded ? 'Show less' : 'Show more'}
+                                                            onClick={() =>
+                                                                toggleExpanded(
+                                                                    index,
+                                                                )
+                                                            }
+                                                            className='flex-shrink-0 p-2 hover:bg-accent rounded-lg transition-all duration-200 hover:scale-110'
+                                                            aria-label={
+                                                                isExpanded
+                                                                    ? 'Show less'
+                                                                    : 'Show more'
+                                                            }
                                                         >
                                                             {isExpanded ? (
-                                                                <ChevronUpIcon className='h-4 w-4 text-muted-foreground' />
+                                                                <ChevronUpIcon className='h-5 w-5 text-muted-foreground' />
                                                             ) : (
-                                                                <ChevronDownIcon className='h-4 w-4 text-muted-foreground' />
+                                                                <ChevronDownIcon className='h-5 w-5 text-muted-foreground' />
                                                             )}
                                                         </button>
                                                     </div>
 
-                                                    <p className={`mt-2 text-sm text-muted-foreground ${!isExpanded ? 'line-clamp-3' : ''}`}>
+                                                    <p
+                                                        className={`mt-2 text-sm text-muted-foreground ${
+                                                            !isExpanded
+                                                                ? 'line-clamp-3'
+                                                                : ''
+                                                        }`}
+                                                    >
                                                         {item.description}
                                                     </p>
 
                                                     {item.subcategory && (
-                                                        <span className='inline-block mt-3 px-2 py-1 text-xs font-medium bg-secondary text-secondary-foreground rounded'>
+                                                        <span className='inline-block mt-3 px-3 py-1 text-xs font-medium bg-secondary text-secondary-foreground rounded-full'>
                                                             {item.subcategory}
                                                         </span>
                                                     )}
@@ -327,30 +431,36 @@ export default function LineTimeline() {
                 </div>
 
                 {/* Summary Stats */}
-                <div className='mt-16 grid grid-cols-2 gap-8 sm:grid-cols-4'>
-                    <div className='text-center bg-card p-6 rounded-lg border border-border'>
-                        <p className='text-3xl font-bold text-primary'>25+</p>
-                        <p className='mt-1 text-sm text-muted-foreground'>
+                <div className='mt-20 grid grid-cols-2 gap-4 sm:gap-6 sm:grid-cols-4'>
+                    <div className='group text-center bg-card p-6 rounded-xl border-2 border-border hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:-translate-y-1'>
+                        <p className='text-4xl font-bold bg-gradient-to-br from-primary to-primary/60 bg-clip-text text-transparent'>
+                            25+
+                        </p>
+                        <p className='mt-2 text-sm font-medium text-muted-foreground group-hover:text-foreground transition-colors'>
                             Total Accusers
                         </p>
                     </div>
-                    <div className='text-center bg-card p-6 rounded-lg border border-border'>
-                        <p className='text-3xl font-bold text-primary'>17</p>
-                        <p className='mt-1 text-sm text-muted-foreground'>
+                    <div className='group text-center bg-card p-6 rounded-xl border-2 border-border hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:-translate-y-1'>
+                        <p className='text-4xl font-bold bg-gradient-to-br from-primary to-primary/60 bg-clip-text text-transparent'>
+                            17
+                        </p>
+                        <p className='mt-2 text-sm font-medium text-muted-foreground group-hover:text-foreground transition-colors'>
                             Years of Friendship
                         </p>
                     </div>
-                    <div className='text-center bg-card p-6 rounded-lg border border-border'>
-                        <p className='text-3xl font-bold text-primary'>2</p>
-                        <p className='mt-1 text-sm text-muted-foreground'>
+                    <div className='group text-center bg-card p-6 rounded-xl border-2 border-border hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:-translate-y-1'>
+                        <p className='text-4xl font-bold bg-gradient-to-br from-primary to-primary/60 bg-clip-text text-transparent'>
+                            2
+                        </p>
+                        <p className='mt-2 text-sm font-medium text-muted-foreground group-hover:text-foreground transition-colors'>
                             Successful Lawsuits
                         </p>
                     </div>
-                    <div className='text-center bg-card p-6 rounded-lg border border-border'>
-                        <p className='text-3xl font-bold text-primary'>
+                    <div className='group text-center bg-card p-6 rounded-xl border-2 border-border hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:-translate-y-1'>
+                        <p className='text-4xl font-bold bg-gradient-to-br from-primary to-primary/60 bg-clip-text text-transparent'>
                             $88.3M
                         </p>
-                        <p className='mt-1 text-sm text-muted-foreground'>
+                        <p className='mt-2 text-sm font-medium text-muted-foreground group-hover:text-foreground transition-colors'>
                             Court Damages
                         </p>
                     </div>

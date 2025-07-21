@@ -1,119 +1,16 @@
 'use client';
 
-import { useState } from 'react';
-import { Dialog, DialogPanel } from '@headlessui/react';
 import {
-    Bars3Icon,
-    XMarkIcon,
     DocumentTextIcon,
-    ScaleIcon,
     ShieldCheckIcon,
     InformationCircleIcon,
 } from '@heroicons/react/24/outline';
 
-const navigation = [
-    { name: 'Documents', href: '#documents' },
-    { name: 'Timeline', href: '#timeline' },
-    { name: 'Legal Cases', href: '#legal' },
-    { name: 'Resources', href: '#resources' },
-    { name: 'About', href: '#about' },
-];
-
 export default function Hero() {
-    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
     return (
         <div className='bg-background'>
-            <header className='absolute inset-x-0 top-0 z-50 bg-background/80 backdrop-blur-sm'>
-                <div className='mx-auto max-w-7xl'>
-                    <div className='px-6 pt-6'>
-                        <nav
-                            aria-label='Global'
-                            className='flex items-center justify-between'
-                        >
-                            <a
-                                href='#'
-                                className='-m-1.5 p-1.5 flex items-center gap-2'
-                            >
-                                <ScaleIcon className='h-8 w-8 text-primary' />
-                                <span className='font-semibold text-foreground'>
-                                    Truth Archive
-                                </span>
-                            </a>
-                            <button
-                                type='button'
-                                onClick={() => setMobileMenuOpen(true)}
-                                className='-m-2.5 rounded-md p-2.5 text-muted-foreground hover:text-foreground lg:hidden'
-                            >
-                                <span className='sr-only'>Open main menu</span>
-                                <Bars3Icon
-                                    aria-hidden='true'
-                                    className='size-6'
-                                />
-                            </button>
-                            <div className='hidden lg:flex lg:gap-x-8'>
-                                {navigation.map((item) => (
-                                    <a
-                                        key={item.name}
-                                        href={item.href}
-                                        className='text-sm font-medium text-muted-foreground hover:text-foreground transition-colors'
-                                    >
-                                        {item.name}
-                                    </a>
-                                ))}
-                            </div>
-                        </nav>
-                    </div>
-                </div>
-                <Dialog
-                    open={mobileMenuOpen}
-                    onClose={setMobileMenuOpen}
-                    className='lg:hidden'
-                >
-                    <div className='fixed inset-0 z-50' />
-                    <DialogPanel className='fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-card p-6 sm:max-w-sm sm:ring-1 sm:ring-border'>
-                        <div className='flex items-center justify-between'>
-                            <a
-                                href='#'
-                                className='-m-1.5 p-1.5 flex items-center gap-2'
-                            >
-                                <ScaleIcon className='h-8 w-8 text-primary' />
-                                <span className='font-semibold text-card-foreground'>
-                                    Truth Archive
-                                </span>
-                            </a>
-                            <button
-                                type='button'
-                                onClick={() => setMobileMenuOpen(false)}
-                                className='-m-2.5 rounded-md p-2.5 text-muted-foreground hover:text-card-foreground'
-                            >
-                                <span className='sr-only'>Close menu</span>
-                                <XMarkIcon
-                                    aria-hidden='true'
-                                    className='size-6'
-                                />
-                            </button>
-                        </div>
-                        <div className='mt-6 flow-root'>
-                            <div className='-my-6 divide-y divide-border'>
-                                <div className='space-y-2 py-6'>
-                                    {navigation.map((item) => (
-                                        <a
-                                            key={item.name}
-                                            href={item.href}
-                                            className='-mx-3 block rounded-lg px-3 py-2 text-base font-medium text-card-foreground hover:bg-accent'
-                                        >
-                                            {item.name}
-                                        </a>
-                                    ))}
-                                </div>
-                            </div>
-                        </div>
-                    </DialogPanel>
-                </Dialog>
-            </header>
-
-            <div className='relative isolate pt-14'>
+            <div className='relative isolate'>
                 {/* Background gradient */}
                 <div className='absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80'>
                     <div className='relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-primary to-info opacity-20 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]' />
