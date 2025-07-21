@@ -24,8 +24,8 @@ export default function EpsteinBirthdayQuoteSection() {
                             />
                         </svg>
 
-                        <blockquote className='text-xl/8 font-semibold text-foreground sm:text-2xl/9'>
-                            <p>
+                        <blockquote className='text-2xl/8 font-extrabold text-foreground sm:text-3xl/10 lg:text-4xl/[1.2] tracking-tight'>
+                            <p className='drop-shadow-sm'>
                                 Happy Birthday — and may every day be another
                                 wonderful secret
                             </p>

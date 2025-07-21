@@ -76,34 +76,34 @@
 
 @media (prefers-color-scheme: dark) {
     :root {
-        /* Dark mode colors - high contrast for readability */
+        /* Dark mode colors - improved contrast and readability */
         --background: #0a0a0a;
-        --foreground: #fafafa;
-        --card: #1a1a1a;
-        --card-foreground: #fafafa;
-        --popover: #1a1a1a;
-        --popover-foreground: #fafafa;
-        --primary: #60a5fa;
-        --primary-foreground: #0a0a0a;
-        --secondary: #262626;
-        --secondary-foreground: #fafafa;
-        --muted: #262626;
-        --muted-foreground: #a3a3a3;
-        --accent: #262626;
-        --accent-foreground: #fafafa;
+        --foreground: #e5e5e5;
+        --card: #141414;
+        --card-foreground: #e5e5e5;
+        --popover: #141414;
+        --popover-foreground: #e5e5e5;
+        --primary: #3b82f6;
+        --primary-foreground: #ffffff;
+        --secondary: #1f1f1f;
+        --secondary-foreground: #e5e5e5;
+        --muted: #1f1f1f;
+        --muted-foreground: #9ca3af;
+        --accent: #2563eb;
+        --accent-foreground: #ffffff;
         --destructive: #ef4444;
-        --destructive-foreground: #fafafa;
-        --border: #262626;
-        --input: #262626;
-        --ring: #60a5fa;
+        --destructive-foreground: #ffffff;
+        --border: #2e2e2e;
+        --input: #2e2e2e;
+        --ring: #3b82f6;
 
         /* Additional semantic colors for dark mode */
-        --info: #60a5fa;
-        --info-foreground: #0a0a0a;
-        --warning: #fbbf24;
-        --warning-foreground: #0a0a0a;
-        --success: #34d399;
-        --success-foreground: #0a0a0a;
+        --info: #3b82f6;
+        --info-foreground: #ffffff;
+        --warning: #f59e0b;
+        --warning-foreground: #000000;
+        --success: #10b981;
+        --success-foreground: #ffffff;
     }
 }
 
@@ -113,6 +113,23 @@
     border-color: var(--border);
 }
 
+html {
+    scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+    
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
 body {
     background: var(--background);
     color: var(--foreground);
@@ -120,12 +137,54 @@ body {
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    min-height: 100vh;
 }
 
 /* Focus styles for accessibility */
+:focus {
+    outline: none;
+}
+
 :focus-visible {
-    outline: 2px solid var(--ring);
-    outline-offset: 2px;
+    outline: 3px solid var(--ring);
+    outline-offset: 3px;
+    border-radius: var(--radius-sm);
+}
+
+/* Better focus for interactive elements */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+    outline: 3px solid var(--ring);
+    outline-offset: 3px;
+    transition: outline-offset 0.2s ease;
+}
+
+/* Screen reader only content */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
+.not-sr-only {
+    position: static;
+    width: auto;
+    height: auto;
+    padding: 0;
+    margin: 0;
+    overflow: visible;
+    clip: auto;
+    white-space: normal;
 }
 
 /* Selection styles */
@@ -208,6 +267,145 @@ a:hover {
     background-color: var(--destructive);
 }
 
+/* Animation utilities */
+@keyframes fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fade-up {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slide-in {
+    from {
+        transform: translateX(-100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+/* Animation classes */
+.animate-fade-in {
+    animation: fade-in 0.5s ease-out;
+}
+
+.animate-fade-up {
+    animation: fade-up 0.6s ease-out;
+}
+
+.animate-slide-in {
+    animation: slide-in 0.3s ease-out;
+}
+
+.animate-pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Transition utilities */
+.transition-all {
+    transition-property: all;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 300ms;
+}
+
+.transition-colors {
+    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 300ms;
+}
+
+.transition-opacity {
+    transition-property: opacity;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 300ms;
+}
+
+.transition-transform {
+    transition-property: transform;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 300ms;
+}
+
+/* Hover animations */
+.hover-lift {
+    transition: transform 0.2s ease;
+}
+
+.hover-lift:hover {
+    transform: translateY(-4px);
+}
+
+.hover-scale {
+    transition: transform 0.2s ease;
+}
+
+.hover-scale:hover {
+    transform: scale(1.05);
+}
+
+/* Loading skeleton */
+.skeleton {
+    position: relative;
+    overflow: hidden;
+    background-color: var(--muted);
+}
+
+.skeleton::after {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    transform: translateX(-100%);
+    background-image: linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0) 0,
+        rgba(255, 255, 255, 0.2) 20%,
+        rgba(255, 255, 255, 0.5) 60%,
+        rgba(255, 255, 255, 0)
+    );
+    animation: shimmer 2s infinite;
+    content: '';
+}
+
+@keyframes shimmer {
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+/* Container queries support */
+@container (min-width: 640px) {
+    .container\:text-2xl {
+        font-size: 1.5rem;
+        line-height: 2rem;
+    }
+}
+
 /* Print styles */
 @media print {
     body {
@@ -218,5 +416,9 @@ a:hover {
     a {
         color: black;
         text-decoration: underline;
+    }
+    
+    .no-print {
+        display: none !important;
     }
 }
