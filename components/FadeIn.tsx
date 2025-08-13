@@ -72,7 +72,7 @@ export function FadeInStagger({
         {React.Children.map(childrenArray, (child, index) => {
           if (React.isValidElement(child)) {
             const delay = index * (faster ? 120 : 200)
-            return React.cloneElement(child as React.ReactElement<any>, {
+            return React.cloneElement(child as React.ReactElement<{delay?: number}>, {
               delay,
             })
           }

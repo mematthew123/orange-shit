@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
     ChevronDownIcon,
     ChevronUpIcon,
@@ -8,9 +8,22 @@ import {
     DocumentTextIcon,
     ScaleIcon,
     ExclamationTriangleIcon,
+    CheckBadgeIcon,
+    NewspaperIcon,
+    SparklesIcon,
 } from '@heroicons/react/24/outline';
 
-const timeline = [
+interface TimelineItem {
+    name: string;
+    description: string;
+    date: string;
+    dateTime: string;
+    category: string;
+    subcategory?: string;
+    isKeyEvent?: boolean;
+}
+
+const timeline: TimelineItem[] = [
     {
         name: 'First Meeting',
         description:
@@ -18,6 +31,7 @@ const timeline = [
         date: 'Late 1980s',
         dateTime: '1987',
         category: 'relationship',
+        isKeyEvent: true,
     },
     {
         name: 'Mar-a-Lago Party',
@@ -75,6 +89,7 @@ const timeline = [
         date: '2002',
         dateTime: '2002',
         category: 'relationship',
+        isKeyEvent: true,
     },
     {
         name: 'The Birthday Letter',
@@ -99,6 +114,7 @@ const timeline = [
         date: 'Oct 7, 2016',
         dateTime: '2016-10-07',
         category: 'scandal',
+        isKeyEvent: true,
     },
     {
         name: 'Multiple Accusers Come Forward',
@@ -131,6 +147,7 @@ const timeline = [
         date: 'May 2023',
         dateTime: '2023-05',
         category: 'legal',
+        isKeyEvent: true,
     },
     {
         name: 'Carroll Defamation Verdict',
@@ -139,6 +156,7 @@ const timeline = [
         date: 'Jan 2024',
         dateTime: '2024-01',
         category: 'legal',
+        isKeyEvent: true,
     },
     {
         name: 'Stacey Williams Allegation',
@@ -178,6 +196,11 @@ export default function LineTimeline() {
     const [selectedCategory, setSelectedCategory] =
         useState<keyof typeof categories>('all');
     const [expandedItems, setExpandedItems] = useState<Set<number>>(new Set());
+    const [isMounted, setIsMounted] = useState(false);
+
+    useEffect(() => {
+        setIsMounted(true);
+    }, []);
 
     const filteredTimeline =
         selectedCategory === 'all'
@@ -195,15 +218,19 @@ export default function LineTimeline() {
     };
 
     return (
-        <div className='bg-secondary/20 py-24 sm:py-32' id='timeline'>
+        <div className='bg-gradient-to-b from-black to-neutral-950 py-24 sm:py-32' id='timeline'>
             <div className='mx-auto max-w-7xl px-6 lg:px-8'>
                 <div className='mx-auto max-w-2xl text-center mb-12'>
-                    <h2 className='text-3xl font-bold tracking-tight text-foreground sm:text-4xl'>
+                    <h2 className='text-5xl font-bold tracking-tight text-white sm:text-6xl quote-serif'>
                         Timeline of Events
                     </h2>
-                    <p className='mt-4 text-lg text-muted-foreground'>
-                        A chronological record of relationships, allegations,
-                        and legal proceedings from the 1980s to present
+                    <div className='mt-2 flex items-center justify-center gap-2 text-sm text-neutral-500'>
+                        <CheckBadgeIcon className='h-4 w-4 text-green-500' />
+                        <span className='quote-attribution uppercase tracking-wider'>Verified Court Records & Media Reports</span>
+                    </div>
+                    <p className='mt-6 text-xl text-neutral-300 leading-relaxed max-w-3xl mx-auto'>
+                        A chronological record spanning <span className='highlight-text font-semibold text-white'>40+ years</span> of relationships, 
+                        allegations, and legal proceedings
                     </p>
                 </div>
 
@@ -222,8 +249,8 @@ export default function LineTimeline() {
                                 }
                                 className={`group relative px-5 py-3 rounded-xl text-sm font-medium transition-all duration-300 ${
                                     isSelected
-                                        ? 'bg-primary text-primary-foreground shadow-xl scale-105 ring-2 ring-primary/20'
-                                        : 'bg-card text-card-foreground hover:bg-accent hover:scale-105 hover:shadow-md border border-border'
+                                        ? 'bg-primary-600 text-white shadow-xl scale-105 ring-2 ring-primary-500/20'
+                                        : 'bg-neutral-900/50 text-neutral-300 hover:bg-neutral-800/50 hover:scale-105 hover:shadow-md border border-white/10'
                                 }`}
                             >
                                 <div className='flex items-center gap-2'>
@@ -248,7 +275,7 @@ export default function LineTimeline() {
                 <div className='mx-auto max-w-6xl'>
                     <div className='relative'>
                         {/* Timeline line - left on mobile, center on desktop */}
-                        <div className='absolute left-8 md:left-1/2 md:transform md:-translate-x-1/2 w-0.5 h-full bg-gradient-to-b from-border via-primary/20 to-border' />
+                        <div className='absolute left-8 md:left-1/2 md:transform md:-translate-x-1/2 w-0.5 h-full bg-gradient-to-b from-white/10 via-primary-500/20 to-white/10' />
 
                         <div className='space-y-12'>
                             {filteredTimeline.map((item, index) => {
@@ -260,13 +287,19 @@ export default function LineTimeline() {
                                 const isEven = index % 2 === 0;
 
                                 return (
-                                    <div key={index} className='relative'>
+                                    <div 
+                                        key={index} 
+                                        className={`relative transition-all duration-700 ${
+                                            isMounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+                                        }`}
+                                        style={{ transitionDelay: `${index * 100}ms` }}
+                                    >
                                         {/* Mobile Layout */}
                                         <div className='md:hidden flex'>
                                             {/* Timeline dot for mobile */}
                                             <div className='absolute left-8 -translate-x-1/2 z-10'>
                                                 <div
-                                                    className={`w-4 h-4 rounded-full border-4 border-background shadow-lg ${categoryInfo.color.replace(
+                                                    className={`w-4 h-4 rounded-full border-4 border-black shadow-lg ${categoryInfo.color.replace(
                                                         'text-',
                                                         'bg-',
                                                     )}`}
@@ -286,21 +319,27 @@ export default function LineTimeline() {
                                             {/* Content for mobile */}
                                             <div className='ml-16 flex-1'>
                                                 <div
-                                                    className={`bg-card p-6 rounded-xl border-2 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl ${
+                                                    className={`bg-neutral-900/50 backdrop-blur p-6 rounded-xl border-2 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl ${
                                                         isExpanded
-                                                            ? 'border-primary/50 shadow-lg'
-                                                            : 'border-border hover:border-primary/30'
+                                                            ? 'border-primary-500/50 shadow-lg'
+                                                            : 'border-white/10 hover:border-primary-500/30'
                                                     }`}
                                                 >
-                                                    <time
-                                                        dateTime={item.dateTime}
-                                                        className={`text-sm font-semibold ${categoryInfo.color} block mb-2`}
-                                                    >
-                                                        {item.date}
-                                                    </time>
+                                                    <div className='flex items-center gap-2 mb-3'>
+                                                        <CalendarIcon className='h-4 w-4 text-primary-500' />
+                                                        <time
+                                                            dateTime={item.dateTime}
+                                                            className={`text-xs font-bold ${categoryInfo.color} uppercase tracking-wider quote-attribution`}
+                                                        >
+                                                            {item.date}
+                                                        </time>
+                                                    </div>
 
                                                     <div className='flex items-start justify-between'>
-                                                        <h3 className='text-lg font-semibold text-card-foreground pr-2'>
+                                                        <h3 className='text-xl font-bold text-white pr-2 quote-serif leading-tight'>
+                                                            {item.isKeyEvent && (
+                                                                <SparklesIcon className='inline-block h-5 w-5 text-amber-500 mr-2' />
+                                                            )}
                                                             {item.name}
                                                         </h3>
                                                         <button
@@ -309,7 +348,7 @@ export default function LineTimeline() {
                                                                     index,
                                                                 )
                                                             }
-                                                            className='flex-shrink-0 p-2 hover:bg-accent rounded-lg transition-all duration-200 hover:scale-110'
+                                                            className='flex-shrink-0 p-2 hover:bg-white/10 rounded-lg transition-all duration-200 hover:scale-110'
                                                             aria-label={
                                                                 isExpanded
                                                                     ? 'Show less'
@@ -317,28 +356,43 @@ export default function LineTimeline() {
                                                             }
                                                         >
                                                             {isExpanded ? (
-                                                                <ChevronUpIcon className='h-5 w-5 text-muted-foreground' />
+                                                                <ChevronUpIcon className='h-5 w-5 text-neutral-400' />
                                                             ) : (
-                                                                <ChevronDownIcon className='h-5 w-5 text-muted-foreground' />
+                                                                <ChevronDownIcon className='h-5 w-5 text-neutral-400' />
                                                             )}
                                                         </button>
                                                     </div>
 
                                                     <p
-                                                        className={`mt-2 text-sm text-muted-foreground ${
+                                                        className={`mt-3 text-base text-neutral-300 leading-relaxed ${
                                                             !isExpanded
                                                                 ? 'line-clamp-3'
-                                                                : ''
+                                                                : 'animate-fade-in'
                                                         }`}
                                                     >
                                                         {item.description}
                                                     </p>
 
-                                                    {item.subcategory && (
-                                                        <span className='inline-block mt-3 px-3 py-1 text-xs font-medium bg-secondary text-secondary-foreground rounded-full'>
-                                                            {item.subcategory}
-                                                        </span>
-                                                    )}
+                                                    <div className='mt-4 flex items-center gap-2 flex-wrap'>
+                                                        {item.subcategory && (
+                                                            <span className='inline-flex items-center gap-1 px-3 py-1 text-xs font-bold bg-red-500/20 text-red-400 rounded-full uppercase tracking-wider'>
+                                                                <ExclamationTriangleIcon className='h-3 w-3' />
+                                                                {item.subcategory}
+                                                            </span>
+                                                        )}
+                                                        {item.category === 'legal' && (
+                                                            <span className='inline-flex items-center gap-1 px-3 py-1 text-xs font-bold bg-green-500/20 text-green-400 rounded-full'>
+                                                                <ScaleIcon className='h-3 w-3' />
+                                                                Court Filing
+                                                            </span>
+                                                        )}
+                                                        {item.category === 'scandal' && (
+                                                            <span className='inline-flex items-center gap-1 px-3 py-1 text-xs font-bold bg-amber-500/20 text-amber-400 rounded-full'>
+                                                                <NewspaperIcon className='h-3 w-3' />
+                                                                Public Record
+                                                            </span>
+                                                        )}
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -358,14 +412,36 @@ export default function LineTimeline() {
                                                         : 'text-left pl-8 order-1'
                                                 }`}
                                             >
-                                                <time
-                                                    dateTime={item.dateTime}
-                                                    className={`text-sm font-semibold ${categoryInfo.color}`}
-                                                >
-                                                    {item.date}
-                                                </time>
+                                                <div className={`inline-flex items-center gap-2 ${isEven ? 'flex-row-reverse' : ''}`}>
+                                                    <CalendarIcon className='h-4 w-4 text-primary-500' />
+                                                    <time
+                                                        dateTime={item.dateTime}
+                                                        className={`text-xs font-bold ${categoryInfo.color} uppercase tracking-wider quote-attribution`}
+                                                    >
+                                                        {item.date}
+                                                    </time>
+                                                </div>
                                             </div>
 
+                                            {/* Timeline dot for desktop */}
+                                            <div className='absolute left-1/2 -translate-x-1/2 z-10'>
+                                                <div
+                                                    className={`w-4 h-4 rounded-full border-4 border-black shadow-lg ${categoryInfo.color.replace(
+                                                        'text-',
+                                                        'bg-',
+                                                    )}`}
+                                                />
+                                                <div
+                                                    className={`absolute -inset-2 rounded-full ${categoryInfo.color.replace(
+                                                        'text-',
+                                                        'bg-',
+                                                    )} opacity-20 ${
+                                                        isExpanded
+                                                            ? 'animate-ping'
+                                                            : 'animate-pulse'
+                                                    }`}
+                                                />
+                                            </div>
 
                                             {/* Content card for desktop */}
                                             <div
@@ -374,14 +450,17 @@ export default function LineTimeline() {
                                                 }`}
                                             >
                                                 <div
-                                                    className={`bg-card p-6 rounded-xl border-2 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl ${
+                                                    className={`bg-neutral-900/50 backdrop-blur p-6 rounded-xl border-2 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl ${
                                                         isExpanded
-                                                            ? 'border-primary/50 shadow-lg'
-                                                            : 'border-border hover:border-primary/30'
+                                                            ? 'border-primary-500/50 shadow-lg'
+                                                            : 'border-white/10 hover:border-primary-500/30'
                                                     }`}
                                                 >
                                                     <div className='flex items-start justify-between'>
-                                                        <h3 className='text-lg font-semibold text-card-foreground pr-2'>
+                                                        <h3 className='text-xl font-bold text-white pr-2 quote-serif leading-tight'>
+                                                            {item.isKeyEvent && (
+                                                                <SparklesIcon className='inline-block h-5 w-5 text-amber-500 mr-2' />
+                                                            )}
                                                             {item.name}
                                                         </h3>
                                                         <button
@@ -390,7 +469,7 @@ export default function LineTimeline() {
                                                                     index,
                                                                 )
                                                             }
-                                                            className='flex-shrink-0 p-2 hover:bg-accent rounded-lg transition-all duration-200 hover:scale-110'
+                                                            className='flex-shrink-0 p-2 hover:bg-white/10 rounded-lg transition-all duration-200 hover:scale-110'
                                                             aria-label={
                                                                 isExpanded
                                                                     ? 'Show less'
@@ -398,28 +477,43 @@ export default function LineTimeline() {
                                                             }
                                                         >
                                                             {isExpanded ? (
-                                                                <ChevronUpIcon className='h-5 w-5 text-muted-foreground' />
+                                                                <ChevronUpIcon className='h-5 w-5 text-neutral-400' />
                                                             ) : (
-                                                                <ChevronDownIcon className='h-5 w-5 text-muted-foreground' />
+                                                                <ChevronDownIcon className='h-5 w-5 text-neutral-400' />
                                                             )}
                                                         </button>
                                                     </div>
 
                                                     <p
-                                                        className={`mt-2 text-sm text-muted-foreground ${
+                                                        className={`mt-3 text-base text-neutral-300 leading-relaxed ${
                                                             !isExpanded
                                                                 ? 'line-clamp-3'
-                                                                : ''
+                                                                : 'animate-fade-in'
                                                         }`}
                                                     >
                                                         {item.description}
                                                     </p>
 
-                                                    {item.subcategory && (
-                                                        <span className='inline-block mt-3 px-3 py-1 text-xs font-medium bg-secondary text-secondary-foreground rounded-full'>
-                                                            {item.subcategory}
-                                                        </span>
-                                                    )}
+                                                    <div className='mt-4 flex items-center gap-2 flex-wrap'>
+                                                        {item.subcategory && (
+                                                            <span className='inline-flex items-center gap-1 px-3 py-1 text-xs font-bold bg-red-500/20 text-red-400 rounded-full uppercase tracking-wider'>
+                                                                <ExclamationTriangleIcon className='h-3 w-3' />
+                                                                {item.subcategory}
+                                                            </span>
+                                                        )}
+                                                        {item.category === 'legal' && (
+                                                            <span className='inline-flex items-center gap-1 px-3 py-1 text-xs font-bold bg-green-500/20 text-green-400 rounded-full'>
+                                                                <ScaleIcon className='h-3 w-3' />
+                                                                Court Filing
+                                                            </span>
+                                                        )}
+                                                        {item.category === 'scandal' && (
+                                                            <span className='inline-flex items-center gap-1 px-3 py-1 text-xs font-bold bg-amber-500/20 text-amber-400 rounded-full'>
+                                                                <NewspaperIcon className='h-3 w-3' />
+                                                                Public Record
+                                                            </span>
+                                                        )}
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -430,39 +524,46 @@ export default function LineTimeline() {
                     </div>
                 </div>
 
-                {/* Summary Stats */}
-                <div className='mt-20 grid grid-cols-2 gap-4 sm:gap-6 sm:grid-cols-4'>
-                    <div className='group text-center bg-card p-6 rounded-xl border-2 border-border hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:-translate-y-1'>
-                        <p className='text-4xl font-bold bg-gradient-to-br from-primary to-primary/60 bg-clip-text text-transparent'>
+                {/* Summary Stats with NYT-style emphasis */}
+                <div className='mt-24 mb-8 text-center'>
+                    <h3 className='text-2xl font-bold text-white mb-8 quote-serif'>By the Numbers</h3>
+                </div>
+                <div className='grid grid-cols-2 gap-6 sm:gap-8 sm:grid-cols-4'>
+                    <div className='group text-center bg-neutral-900/50 backdrop-blur p-8 rounded-xl border-2 border-white/10 hover:border-primary-500/50 transition-all duration-300 hover:shadow-lg hover:-translate-y-2'>
+                        <p className='text-5xl font-bold bg-gradient-to-br from-red-400 to-red-600 bg-clip-text text-transparent quote-serif'>
                             25+
                         </p>
-                        <p className='mt-2 text-sm font-medium text-muted-foreground group-hover:text-foreground transition-colors'>
+                        <p className='mt-3 text-xs font-bold text-neutral-400 group-hover:text-white transition-colors uppercase tracking-wider quote-attribution'>
                             Total Accusers
                         </p>
+                        <div className='mt-2 h-0.5 w-8 mx-auto bg-red-500 opacity-50'></div>
                     </div>
-                    <div className='group text-center bg-card p-6 rounded-xl border-2 border-border hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:-translate-y-1'>
-                        <p className='text-4xl font-bold bg-gradient-to-br from-primary to-primary/60 bg-clip-text text-transparent'>
+                    <div className='group text-center bg-neutral-900/50 backdrop-blur p-8 rounded-xl border-2 border-white/10 hover:border-primary-500/50 transition-all duration-300 hover:shadow-lg hover:-translate-y-2'>
+                        <p className='text-5xl font-bold bg-gradient-to-br from-amber-400 to-amber-600 bg-clip-text text-transparent quote-serif'>
                             17
                         </p>
-                        <p className='mt-2 text-sm font-medium text-muted-foreground group-hover:text-foreground transition-colors'>
+                        <p className='mt-3 text-xs font-bold text-neutral-400 group-hover:text-white transition-colors uppercase tracking-wider quote-attribution'>
                             Years of Friendship
                         </p>
+                        <div className='mt-2 h-0.5 w-8 mx-auto bg-amber-500 opacity-50'></div>
                     </div>
-                    <div className='group text-center bg-card p-6 rounded-xl border-2 border-border hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:-translate-y-1'>
-                        <p className='text-4xl font-bold bg-gradient-to-br from-primary to-primary/60 bg-clip-text text-transparent'>
+                    <div className='group text-center bg-neutral-900/50 backdrop-blur p-8 rounded-xl border-2 border-white/10 hover:border-primary-500/50 transition-all duration-300 hover:shadow-lg hover:-translate-y-2'>
+                        <p className='text-5xl font-bold bg-gradient-to-br from-green-400 to-green-600 bg-clip-text text-transparent quote-serif'>
                             2
                         </p>
-                        <p className='mt-2 text-sm font-medium text-muted-foreground group-hover:text-foreground transition-colors'>
+                        <p className='mt-3 text-xs font-bold text-neutral-400 group-hover:text-white transition-colors uppercase tracking-wider quote-attribution'>
                             Successful Lawsuits
                         </p>
+                        <div className='mt-2 h-0.5 w-8 mx-auto bg-green-500 opacity-50'></div>
                     </div>
-                    <div className='group text-center bg-card p-6 rounded-xl border-2 border-border hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:-translate-y-1'>
-                        <p className='text-4xl font-bold bg-gradient-to-br from-primary to-primary/60 bg-clip-text text-transparent'>
+                    <div className='group text-center bg-neutral-900/50 backdrop-blur p-8 rounded-xl border-2 border-white/10 hover:border-primary-500/50 transition-all duration-300 hover:shadow-lg hover:-translate-y-2'>
+                        <p className='text-5xl font-bold bg-gradient-to-br from-primary-400 to-primary-600 bg-clip-text text-transparent quote-serif'>
                             $88.3M
                         </p>
-                        <p className='mt-2 text-sm font-medium text-muted-foreground group-hover:text-foreground transition-colors'>
+                        <p className='mt-3 text-xs font-bold text-neutral-400 group-hover:text-white transition-colors uppercase tracking-wider quote-attribution'>
                             Court Damages
                         </p>
+                        <div className='mt-2 h-0.5 w-8 mx-auto bg-primary-500 opacity-50'></div>
                     </div>
                 </div>
             </div>
