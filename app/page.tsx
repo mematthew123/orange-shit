@@ -12,6 +12,9 @@ import { PostAccessHollywoodSpotlight } from '@/components/PostAccessHollywoodSp
 import { ContradictoryQuotes } from '@/components/ContradictoryQuotes';
 import { SectionDivider } from '@/components/SectionDivider';
 import { CallToAction } from '@/components/CallToAction';
+import { InteractiveDataViz } from '@/components/InteractiveDataViz';
+import { MultimediaEvidence } from '@/components/MultimediaEvidence';
+import { VictimCenteredSection } from '@/components/VictimCenteredSection';
 
 export default function Home() {
     return (
@@ -19,6 +22,9 @@ export default function Home() {
             {/* OPENING: Set the Stage */}
             <HeroImpact />
             <ContradictoryQuotes />
+            
+            {/* NEW: Interactive Data Visualizations */}
+            <InteractiveDataViz />
             
             {/* CHAPTER 1: The Epstein Connection */}
             <SectionDivider 
@@ -41,6 +47,10 @@ export default function Home() {
             />
             <PostAccessHollywoodSpotlight />
             <PageantAllegationsSpotlight />
+            
+            {/* NEW: Multimedia Evidence Archive */}
+            <MultimediaEvidence />
+            
             <LineTimeline />
             
             {/* CHAPTER 3: In Their Own Words */}
@@ -61,6 +71,9 @@ export default function Home() {
                 theme="dark"
             />
             <EJeanCarrollSpotlight />
+            
+            {/* NEW: Victim-Centered Section - Honoring Survivors */}
+            <VictimCenteredSection />
             
             {/* CLOSING: Call to Action */}
             <CallToAction />
