@@ -6,6 +6,7 @@ import { useEffect, useState, useRef } from 'react';
 export function HeroImpact() {
     const [isMounted, setIsMounted] = useState(false);
     const [currentStatIndex, setCurrentStatIndex] = useState(0);
+    const [scrollY, setScrollY] = useState(0);
     const heroRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -20,6 +21,22 @@ export function HeroImpact() {
         return () => clearInterval(interval);
     }, [isMounted]);
 
+    // Parallax scroll effect
+    useEffect(() => {
+        const handleScroll = () => {
+            if (heroRef.current) {
+                const rect = heroRef.current.getBoundingClientRect();
+                const scrollProgress = Math.max(0, -rect.top / (rect.height * 0.8));
+                setScrollY(scrollProgress);
+            }
+        };
+
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        handleScroll();
+
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
+
     const stats = [
         { number: '25+', label: 'Women Have Accused Trump', color: 'text-red-500' },
         { number: '13', label: 'Years Old - Youngest Alleged Victim', color: 'text-amber-500' },
@@ -33,19 +50,37 @@ export function HeroImpact() {
 
     return (
         <div ref={heroRef} className="relative min-h-screen flex items-center justify-center overflow-hidden bg-black">
-            {/* Animated background gradient */}
-            <div className="absolute inset-0">
+            {/* Animated background gradient - Parallax Layer 1 (slowest) */}
+            <div
+                className="absolute inset-0 transition-transform duration-100"
+                style={{
+                    transform: `translateY(${scrollY * 50}px) scale(${1 + scrollY * 0.1})`,
+                    opacity: 1 - scrollY * 0.3,
+                }}
+            >
                 <div className="absolute inset-0 bg-gradient-to-br from-red-950/20 via-black to-red-950/20 animate-gradient" />
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,black_100%)]" />
             </div>
 
-            {/* Grid pattern overlay */}
-            <div className="absolute inset-0 opacity-10">
+            {/* Grid pattern overlay - Parallax Layer 2 (medium speed) */}
+            <div
+                className="absolute inset-0 opacity-10 transition-transform duration-100"
+                style={{
+                    transform: `translateY(${scrollY * 80}px)`,
+                    opacity: 0.1 - scrollY * 0.1,
+                }}
+            >
                 <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff_1px,transparent_1px),linear-gradient(to_bottom,#ffffff_1px,transparent_1px)] bg-[size:4rem_4rem]" />
             </div>
 
-            {/* Content */}
-            <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 text-center">
+            {/* Content - Parallax Layer 3 (fastest, stays in place mostly) */}
+            <div
+                className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 text-center transition-all duration-100"
+                style={{
+                    transform: `translateY(${scrollY * 30}px)`,
+                    opacity: 1 - scrollY * 0.8,
+                }}
+            >
                 {/* Subtitle */}
                 <div className={`mb-8 transition-all duration-1000 ${
                     isMounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
@@ -170,8 +205,14 @@ export function HeroImpact() {
                 </div>
             </div>
 
-            {/* Quote preview at bottom */}
-            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black via-black/80 to-transparent pt-20 pb-20">
+            {/* Quote preview at bottom - Parallax reveal */}
+            <div
+                className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black via-black/80 to-transparent pt-20 pb-20 transition-all duration-100"
+                style={{
+                    transform: `translateY(${Math.max(0, (1 - scrollY) * 20)}px)`,
+                    opacity: Math.min(1, scrollY * 2),
+                }}
+            >
                 <div className="max-w-4xl mx-auto px-6 text-center">
                     <p className="text-white/60 text-sm uppercase tracking-wider mb-2">Coming Up</p>
                     <p className="text-white/40 text-lg italic">
