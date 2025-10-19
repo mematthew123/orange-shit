@@ -2,7 +2,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import Image from 'next/image';
 import {
     DocumentTextIcon,
@@ -13,7 +12,6 @@ import {
     NewspaperIcon,
     SparklesIcon,
     MagnifyingGlassPlusIcon,
-    ArrowTopRightOnSquareIcon,
 } from '@heroicons/react/24/outline';
 
 export default function TrumpEpsteinTies() {
