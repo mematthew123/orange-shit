@@ -87,63 +87,86 @@ export function InteractiveDataViz() {
     ];
 
     return (
-        <div className="bg-gradient-to-b from-black to-neutral-950 py-24 sm:py-32">
+        <div className="relative bg-gradient-to-b from-black via-neutral-950 to-black py-24 sm:py-32 overflow-hidden">
+            {/* Subtle background pattern */}
+            <div className="absolute inset-0 opacity-[0.03]">
+                <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff_1px,transparent_1px),linear-gradient(to_bottom,#ffffff_1px,transparent_1px)] bg-[size:4rem_4rem]" />
+            </div>
+
             <Container>
                 <FadeIn>
-                    <div className="mx-auto max-w-6xl">
-                        <div className="text-center mb-12">
-                            <h2 className="text-5xl font-bold tracking-tight text-white sm:text-6xl quote-serif">
+                    <div className="mx-auto max-w-6xl relative">
+                        <div className="text-center mb-16">
+                            <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-500/10 border border-blue-500/30 rounded-full mb-6">
+                                <ChartBarIcon className="h-5 w-5 text-blue-400" />
+                                <span className="text-blue-400 text-sm font-semibold uppercase tracking-wider">
+                                    Data Analysis
+                                </span>
+                            </div>
+                            <h2 className="text-5xl font-bold tracking-tight text-white sm:text-6xl quote-serif mb-4">
                                 The Data Tells the Story
                             </h2>
-                            <p className="mt-4 text-xl text-neutral-300">
-                                Interactive visualizations revealing patterns and connections
+                            <p className="mt-4 text-xl text-neutral-400 max-w-3xl mx-auto leading-relaxed">
+                                Patterns, connections, and contradictions revealed through interactive analysis
                             </p>
                         </div>
 
                         {/* View selector */}
-                        <div className="flex flex-wrap justify-center gap-4 mb-12">
+                        <div className="flex flex-wrap justify-center gap-3 mb-16">
                             <button
                                 onClick={() => setSelectedView('network')}
-                                className={`px-6 py-3 rounded-xl font-semibold transition-all ${
+                                className={`group px-6 py-4 rounded-xl font-semibold transition-all border-2 ${
                                     selectedView === 'network'
-                                        ? 'bg-primary-600 text-white shadow-xl scale-105'
-                                        : 'bg-neutral-900/50 text-neutral-300 hover:bg-neutral-800/50'
+                                        ? 'bg-white text-black border-white shadow-2xl scale-105'
+                                        : 'bg-transparent text-neutral-300 border-neutral-700 hover:border-neutral-500 hover:bg-neutral-900/50'
                                 }`}
                             >
-                                <UserGroupIcon className="inline-block h-5 w-5 mr-2" />
+                                <UserGroupIcon className={`inline-block h-5 w-5 mr-2 ${
+                                    selectedView === 'network' ? 'text-black' : 'text-neutral-400 group-hover:text-neutral-300'
+                                }`} />
                                 Connection Network
                             </button>
                             <button
                                 onClick={() => setSelectedView('timeline')}
-                                className={`px-6 py-3 rounded-xl font-semibold transition-all ${
+                                className={`group px-6 py-4 rounded-xl font-semibold transition-all border-2 ${
                                     selectedView === 'timeline'
-                                        ? 'bg-primary-600 text-white shadow-xl scale-105'
-                                        : 'bg-neutral-900/50 text-neutral-300 hover:bg-neutral-800/50'
+                                        ? 'bg-white text-black border-white shadow-2xl scale-105'
+                                        : 'bg-transparent text-neutral-300 border-neutral-700 hover:border-neutral-500 hover:bg-neutral-900/50'
                                 }`}
                             >
-                                <ChartBarIcon className="inline-block h-5 w-5 mr-2" />
-                                Allegations Timeline
+                                <ChartBarIcon className={`inline-block h-5 w-5 mr-2 ${
+                                    selectedView === 'timeline' ? 'text-black' : 'text-neutral-400 group-hover:text-neutral-300'
+                                }`} />
+                                Timeline Analysis
                             </button>
                             <button
                                 onClick={() => setSelectedView('comparison')}
-                                className={`px-6 py-3 rounded-xl font-semibold transition-all ${
+                                className={`group px-6 py-4 rounded-xl font-semibold transition-all border-2 ${
                                     selectedView === 'comparison'
-                                        ? 'bg-primary-600 text-white shadow-xl scale-105'
-                                        : 'bg-neutral-900/50 text-neutral-300 hover:bg-neutral-800/50'
+                                        ? 'bg-white text-black border-white shadow-2xl scale-105'
+                                        : 'bg-transparent text-neutral-300 border-neutral-700 hover:border-neutral-500 hover:bg-neutral-900/50'
                                 }`}
                             >
-                                <ArrowsRightLeftIcon className="inline-block h-5 w-5 mr-2" />
+                                <ArrowsRightLeftIcon className={`inline-block h-5 w-5 mr-2 ${
+                                    selectedView === 'comparison' ? 'text-black' : 'text-neutral-400 group-hover:text-neutral-300'
+                                }`} />
                                 Claims vs Facts
                             </button>
                         </div>
 
                         {/* Network Diagram */}
                         {selectedView === 'network' && (
-                            <div className={`bg-neutral-900/50 backdrop-blur rounded-2xl p-8 border border-white/10 transition-all duration-700 ${
+                            <div className={`bg-gradient-to-br from-neutral-900/80 to-neutral-950/80 backdrop-blur-xl rounded-2xl p-8 md:p-12 border border-white/20 shadow-2xl transition-all duration-700 ${
                                 isMounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
                             }`}>
-                                <h3 className="text-2xl font-bold text-white mb-6 quote-serif">Power Network Connections</h3>
-                                <div className="relative h-96 bg-black/50 rounded-xl overflow-hidden">
+                                <div className="flex items-center justify-between mb-8">
+                                    <div>
+                                        <h3 className="text-3xl font-bold text-white mb-2 quote-serif">Power Network Connections</h3>
+                                        <p className="text-neutral-400 text-sm">Hover over connections to see relationships</p>
+                                    </div>
+                                    <UserGroupIcon className="h-12 w-12 text-neutral-700" />
+                                </div>
+                                <div className="relative h-[500px] bg-black/50 rounded-xl overflow-hidden border border-white/5">
                                     <svg className="w-full h-full">
                                         {/* Draw links */}
                                         {links.map((link, idx) => {
@@ -233,10 +256,16 @@ export function InteractiveDataViz() {
 
                         {/* Timeline Chart */}
                         {selectedView === 'timeline' && (
-                            <div className={`bg-neutral-900/50 backdrop-blur rounded-2xl p-8 border border-white/10 transition-all duration-700 ${
+                            <div className={`bg-gradient-to-br from-neutral-900/80 to-neutral-950/80 backdrop-blur-xl rounded-2xl p-8 md:p-12 border border-white/20 shadow-2xl transition-all duration-700 ${
                                 isMounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
                             }`}>
-                                <h3 className="text-2xl font-bold text-white mb-6 quote-serif">Allegations Over Time</h3>
+                                <div className="flex items-center justify-between mb-8">
+                                    <div>
+                                        <h3 className="text-3xl font-bold text-white mb-2 quote-serif">Allegations Over Time</h3>
+                                        <p className="text-neutral-400 text-sm">Four decades of documented allegations</p>
+                                    </div>
+                                    <ChartBarIcon className="h-12 w-12 text-neutral-700" />
+                                </div>
                                 <div className="space-y-6">
                                     {timelineData.map((period, idx) => (
                                         <div key={period.year} 
@@ -278,37 +307,49 @@ export function InteractiveDataViz() {
 
                         {/* Comparison View */}
                         {selectedView === 'comparison' && (
-                            <div className={`space-y-6 transition-all duration-700 ${
+                            <div className={`transition-all duration-700 ${
                                 isMounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
                             }`}>
-                                <h3 className="text-2xl font-bold text-white mb-6 quote-serif text-center">Trump Says vs Facts Say</h3>
+                                <div className="text-center mb-12">
+                                    <div className="flex items-center justify-center gap-3 mb-4">
+                                        <ArrowsRightLeftIcon className="h-8 w-8 text-neutral-600" />
+                                        <h3 className="text-3xl font-bold text-white quote-serif">Claims vs Reality</h3>
+                                    </div>
+                                    <p className="text-neutral-400 text-sm">Comparing statements against documented facts</p>
+                                </div>
+                                <div className="space-y-6">
                                 {comparisons.map((item, idx) => (
-                                    <div 
+                                    <div
                                         key={idx}
-                                        className="bg-neutral-900/50 backdrop-blur rounded-xl border border-white/10 overflow-hidden"
+                                        className="bg-gradient-to-br from-neutral-900/80 to-neutral-950/80 backdrop-blur-xl rounded-xl border border-white/20 overflow-hidden shadow-xl hover:shadow-2xl transition-all hover:scale-[1.02]"
                                         style={{ animationDelay: `${idx * 100}ms` }}
                                     >
-                                        <div className="bg-gradient-to-r from-red-600/20 to-transparent p-4 border-b border-white/10">
-                                            <h4 className="text-lg font-bold text-white">{item.topic}</h4>
+                                        <div className="bg-gradient-to-r from-red-600/10 via-transparent to-green-600/10 p-5 border-b border-white/10">
+                                            <h4 className="text-xl font-bold text-white quote-serif">{item.topic}</h4>
                                         </div>
                                         <div className="grid md:grid-cols-2 divide-x divide-white/10">
-                                            <div className="p-6">
-                                                <div className="flex items-center gap-2 mb-3">
-                                                    <XCircleIcon className="h-5 w-5 text-red-500" />
-                                                    <span className="text-sm font-bold text-red-400 uppercase tracking-wider">Trump Claims</span>
+                                            <div className="p-6 bg-red-500/5">
+                                                <div className="flex items-center gap-2 mb-4">
+                                                    <div className="p-1.5 bg-red-500/20 rounded-full">
+                                                        <XCircleIcon className="h-4 w-4 text-red-400" />
+                                                    </div>
+                                                    <span className="text-xs font-bold text-red-400 uppercase tracking-widest">Claim</span>
                                                 </div>
-                                                <p className="text-neutral-300 italic">"{item.trumpSays}"</p>
+                                                <p className="text-neutral-300 italic leading-relaxed">"{item.trumpSays}"</p>
                                             </div>
-                                            <div className="p-6">
-                                                <div className="flex items-center gap-2 mb-3">
-                                                    <CheckCircleIcon className="h-5 w-5 text-green-500" />
-                                                    <span className="text-sm font-bold text-green-400 uppercase tracking-wider">Documented Facts</span>
+                                            <div className="p-6 bg-green-500/5">
+                                                <div className="flex items-center gap-2 mb-4">
+                                                    <div className="p-1.5 bg-green-500/20 rounded-full">
+                                                        <CheckCircleIcon className="h-4 w-4 text-green-400" />
+                                                    </div>
+                                                    <span className="text-xs font-bold text-green-400 uppercase tracking-widest">Fact</span>
                                                 </div>
-                                                <p className="text-white font-semibold">{item.factsSay}</p>
+                                                <p className="text-white font-medium leading-relaxed">{item.factsSay}</p>
                                             </div>
                                         </div>
                                     </div>
                                 ))}
+                                </div>
                             </div>
                         )}
                     </div>

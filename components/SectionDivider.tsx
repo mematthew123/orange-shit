@@ -1,22 +1,28 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import Image from 'next/image';
 
 interface SectionDividerProps {
     title: string;
     subtitle?: string;
     chapter?: number;
     theme?: 'dark' | 'light' | 'gradient';
+    backgroundImage?: string;
+    imageAlt?: string;
 }
 
-export function SectionDivider({ 
-    title, 
-    subtitle, 
+export function SectionDivider({
+    title,
+    subtitle,
     chapter,
-    theme = 'dark' 
+    theme = 'dark',
+    backgroundImage,
+    imageAlt = 'Section background'
 }: SectionDividerProps) {
     const [isVisible, setIsVisible] = useState(false);
     const [isMounted, setIsMounted] = useState(false);
+    const [scrollY, setScrollY] = useState(0);
     const dividerRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -44,6 +50,24 @@ export function SectionDivider({
         return () => observer.disconnect();
     }, [isMounted]);
 
+    // Parallax scroll effect for background image
+    useEffect(() => {
+        if (!backgroundImage) return;
+
+        const handleScroll = () => {
+            if (dividerRef.current) {
+                const rect = dividerRef.current.getBoundingClientRect();
+                const scrollProgress = Math.max(0, -rect.top / (rect.height * 0.8));
+                setScrollY(scrollProgress);
+            }
+        };
+
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        handleScroll();
+
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, [backgroundImage]);
+
     const getThemeClasses = () => {
         switch (theme) {
             case 'light':
@@ -56,10 +80,31 @@ export function SectionDivider({
     };
 
     return (
-        <section 
+        <section
             ref={dividerRef}
             className={`relative py-32 overflow-hidden ${getThemeClasses()}`}
         >
+            {/* Background Image with Parallax */}
+            {backgroundImage && (
+                <div
+                    className="absolute inset-0 transition-transform duration-100"
+                    style={{
+                        transform: `translateY(${scrollY * 50}px) scale(${1 + scrollY * 0.1})`,
+                    }}
+                >
+                    <Image
+                        src={backgroundImage}
+                        alt={imageAlt}
+                        fill
+                        className="object-cover"
+                        priority
+                        quality={90}
+                    />
+                    {/* Dark overlay for text readability */}
+                    <div className="absolute inset-0 bg-black/60" />
+                </div>
+            )}
+
             {/* Background pattern */}
             <div className="absolute inset-0 opacity-5">
                 <div className="absolute inset-0 bg-[linear-gradient(to_right,currentColor_1px,transparent_1px),linear-gradient(to_bottom,currentColor_1px,transparent_1px)] bg-[size:4rem_4rem]" />
