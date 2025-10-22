@@ -7,6 +7,7 @@ import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 interface Chapter {
     id: string;
     title: string;
+    section: string;
     element?: HTMLElement | null;
 }
 
@@ -20,16 +21,16 @@ export function ReadingProgress() {
     const chapterElementsRef = useRef<(HTMLElement | null)[]>([]);
 
     const chapters: Chapter[] = [
-        { id: 'hero', title: 'Opening' },
-        { id: 'data-viz', title: 'The Data' },
-        { id: 'chapter-1', title: 'The Epstein Files' },
-        { id: 'chapter-2', title: 'Decades of Allegations' },
-        { id: 'multimedia', title: 'Press Coverage' },
-        { id: 'timeline', title: 'Timeline' },
-        { id: 'chapter-3', title: 'Under Oath' },
-        { id: 'chapter-4', title: 'The Verdict' },
-        { id: 'survivors', title: 'Honoring Survivors' },
-        { id: 'action', title: 'Take Action' },
+        { id: 'hero', title: 'Opening', section: 'Intro' },
+        { id: 'data-viz', title: 'The Data', section: 'Intro' },
+        { id: 'chapter-1', title: 'The Epstein Files', section: 'Chapter 1' },
+        { id: 'chapter-2', title: 'Decades of Allegations', section: 'Chapter 2' },
+        { id: 'multimedia', title: 'Press Coverage', section: 'Evidence' },
+        { id: 'timeline', title: 'Timeline', section: 'Evidence' },
+        { id: 'chapter-3', title: 'Under Oath', section: 'Chapter 3' },
+        { id: 'chapter-4', title: 'The Verdict', section: 'Chapter 4' },
+        { id: 'survivors', title: 'Honoring Survivors', section: 'Closing' },
+        { id: 'action', title: 'Take Action', section: 'Closing' },
     ];
 
     useEffect(() => {
@@ -45,9 +46,10 @@ export function ReadingProgress() {
             setProgress(newProgress);
 
             // Update current chapter
+            const offset = window.innerWidth < 768 ? 50 : 100; // Smaller offset for mobile
             for (let i = chapterElementsRef.current.length - 1; i >= 0; i--) {
                 const element = chapterElementsRef.current[i];
-                if (element && currentScroll >= element.offsetTop - 100) {
+                if (element && currentScroll >= element.offsetTop - offset) {
                     setCurrentChapter(i);
                     break;
                 }
@@ -110,16 +112,16 @@ export function ReadingProgress() {
             <div className={`fixed top-1 left-0 right-0 z-40 transition-all duration-300 ${
                 isVisible ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'
             }`}>
-                <div className="mx-auto max-w-7xl px-4">
-                    <div className="bg-black/90 backdrop-blur-xl border border-white/10 rounded-xl mt-2 shadow-2xl">
-                        <div className="flex items-center justify-between px-4 py-3">
+                <div className="mx-auto max-w-7xl px-2 sm:px-4">
+                    <div className="bg-black/90 backdrop-blur-xl border border-white/10 rounded-lg sm:rounded-xl mt-2 shadow-2xl">
+                        <div className="flex items-center justify-between px-3 sm:px-4 py-2 sm:py-3">
                             {/* Chapter Info */}
-                            <div className="flex items-center gap-3 min-w-0 flex-1">
+                            <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
                                 <span className="text-xs text-neutral-500 font-semibold uppercase tracking-wider whitespace-nowrap">
-                                    Chapter {currentChapter + 1}
+                                    {chapters[currentChapter]?.section}
                                 </span>
                                 <div className="h-4 w-px bg-white/20" />
-                                <span className="text-sm text-white font-medium truncate">
+                                <span className="text-xs sm:text-sm text-white font-medium truncate">
                                     {chapters[currentChapter]?.title}
                                 </span>
                             </div>
@@ -140,13 +142,13 @@ export function ReadingProgress() {
                             {/* Menu Button */}
                             <button
                                 onClick={() => setShowMenu(!showMenu)}
-                                className="p-2 hover:bg-white/10 rounded-lg transition-all shrink-0"
+                                className="p-1.5 sm:p-2 hover:bg-white/10 rounded-lg transition-all shrink-0"
                                 aria-label="Toggle chapter menu"
                             >
                                 {showMenu ? (
-                                    <XMarkIcon className="h-5 w-5 text-white" />
+                                    <XMarkIcon className="h-4 sm:h-5 w-4 sm:w-5 text-white" />
                                 ) : (
-                                    <Bars3Icon className="h-5 w-5 text-white" />
+                                    <Bars3Icon className="h-4 sm:h-5 w-4 sm:w-5 text-white" />
                                 )}
                             </button>
                         </div>
@@ -156,10 +158,10 @@ export function ReadingProgress() {
 
             {/* Chapter Menu Dropdown */}
             {showMenu && (
-                <div className={`fixed top-20 right-4 z-40 transition-all duration-300 ${
+                <div className={`fixed top-16 sm:top-20 right-2 sm:right-4 left-2 sm:left-auto z-40 transition-all duration-300 ${
                     showMenu ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'
                 }`}>
-                    <div className="bg-black/95 backdrop-blur-xl border border-white/10 rounded-xl shadow-2xl overflow-hidden min-w-[280px]">
+                    <div className="bg-black/95 backdrop-blur-xl border border-white/10 rounded-xl shadow-2xl overflow-hidden sm:min-w-[280px]">
                         <div className="p-2 border-b border-white/10 bg-white/5">
                             <p className="text-xs text-neutral-400 font-semibold uppercase tracking-wider px-3 py-2">
                                 Jump to Chapter
@@ -176,17 +178,26 @@ export function ReadingProgress() {
                                             : 'hover:bg-white/10 text-neutral-300'
                                     }`}
                                 >
-                                    <div className="flex items-center gap-3">
-                                        <span className={`text-xs font-mono w-6 ${
-                                            currentChapter === idx ? 'text-white/80' : 'text-neutral-500'
-                                        }`}>
-                                            {String(idx + 1).padStart(2, '0')}
-                                        </span>
-                                        <span className="text-sm font-medium flex-1">
-                                            {chapter.title}
-                                        </span>
+                                    <div className="flex items-center justify-between gap-3">
+                                        <div className="flex items-center gap-3 flex-1">
+                                            <span className={`text-xs font-mono ${
+                                                currentChapter === idx ? 'text-white/80' : 'text-neutral-500'
+                                            }`}>
+                                                {chapter.section.startsWith('Chapter') ? chapter.section.replace('Chapter ', '') : String(idx + 1).padStart(2, '0')}
+                                            </span>
+                                            <div className="flex-1">
+                                                <span className="text-sm font-medium block">
+                                                    {chapter.title}
+                                                </span>
+                                                {!chapter.section.startsWith('Chapter') && (
+                                                    <span className="text-xs text-neutral-500">
+                                                        {chapter.section}
+                                                    </span>
+                                                )}
+                                            </div>
+                                        </div>
                                         {currentChapter === idx && (
-                                            <span className="h-2 w-2 bg-white rounded-full animate-pulse" />
+                                            <span className="h-2 w-2 bg-white rounded-full animate-pulse shrink-0" />
                                         )}
                                     </div>
                                 </button>

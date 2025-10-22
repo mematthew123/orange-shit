@@ -215,7 +215,6 @@
 
 html {
     scroll-behavior: smooth;
-    overflow-x: hidden;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -240,9 +239,7 @@ body {
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
     min-height: 100vh;
-    overflow-x: hidden;
     width: 100%;
-    max-width: 100%;
     position: relative;
 }
 
@@ -373,29 +370,35 @@ select:focus-visible {
     background: var(--foreground);
 }
 
-/* Hide scrollbar on mobile devices */
+/* Mobile-specific fixes */
 @media (max-width: 768px) {
-    /* Hide scrollbar for Chrome, Safari and Opera on mobile */
+    /* Hide vertical scrollbar for Chrome, Safari and Opera on mobile */
     ::-webkit-scrollbar {
         display: none;
     }
 
-    /* Hide scrollbar for IE, Edge and Firefox on mobile */
+    /* Hide vertical scrollbar for IE, Edge and Firefox on mobile */
     html,
     body {
         -ms-overflow-style: none;  /* IE and Edge */
         scrollbar-width: none;  /* Firefox */
     }
 
-    /* Prevent horizontal overflow on mobile */
-    * {
-        max-width: 100%;
-        box-sizing: border-box;
+    /* Prevent horizontal scroll while allowing vertical scroll */
+    body {
+        overflow-x: hidden;
+        overflow-y: auto;
     }
 
-    /* Ensure containers don't overflow */
-    main, section, div {
-        overflow-x: hidden;
+    /* Ensure images and media don't overflow */
+    img, video, iframe, embed, object {
+        max-width: 100%;
+        height: auto;
+    }
+
+    /* Fix potential overflow from absolute/fixed positioned elements */
+    .fixed, .absolute {
+        max-width: 100vw;
     }
 }
 
