@@ -1,6 +1,5 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import { HeroImpact } from '@/components/HeroImpact';
 import IvankaQuoteSection from '@/components/IvankaQuoteSection';
 import QuoteSection from '@/components/QuoteSection';
@@ -18,36 +17,9 @@ import { CallToAction } from '@/components/CallToAction';
 import { InteractiveDataViz } from '@/components/InteractiveDataViz';
 import { DocumentedInThePress } from '@/components/DocumentedInThePress';
 import { VictimCenteredSection } from '@/components/VictimCenteredSection';
-import { ImmersiveEntry } from '@/components/ImmersiveEntry';
 import { ReadingProgress } from '@/components/ReadingProgress';
 
 export default function Home() {
-    const [hasEntered, setHasEntered] = useState(false);
-    const [showContent, setShowContent] = useState(false);
-
-    useEffect(() => {
-        // Check if user has already entered this session
-        const entered = sessionStorage.getItem('hasEntered');
-        if (entered) {
-            setHasEntered(true);
-            setShowContent(true);
-        }
-    }, []);
-
-    const handleEnter = () => {
-        sessionStorage.setItem('hasEntered', 'true');
-        setHasEntered(true);
-        setTimeout(() => setShowContent(true), 500);
-    };
-
-    if (!hasEntered) {
-        return <ImmersiveEntry onEnter={handleEnter} />;
-    }
-
-    if (!showContent) {
-        return <div className="fixed inset-0 bg-black" />;
-    }
-
     return (
         <>
             {/* Reading Progress Header */}
